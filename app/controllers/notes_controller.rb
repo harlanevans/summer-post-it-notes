@@ -1,18 +1,24 @@
 class NotesController < ApplicationController
-  before_action set_note: [:show]
-  
+
   def index
-    @note = Note.all
+    @notes = Note.all
   end
 
   def show
-    # Before Action -- Set Note
+    @note = Note.find(params[:id])
   end
 
   def new
+    @note = Note.new
   end
 
-  def create 
+  def create
+    @note = Note.new(note_params)
+    if @note.save
+      redirect_to notes_path
+    else
+      render :new
+    end
   end
 
   def edit
@@ -21,7 +27,9 @@ class NotesController < ApplicationController
   def update
   end
 
-  def delete
+  def destroy
+    Note.find(params[:id]).destroy
+    redirect_to notes_path
   end
 
   private
